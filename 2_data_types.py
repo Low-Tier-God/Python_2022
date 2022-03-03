@@ -2,7 +2,7 @@
 
 #1-5
 
-print("Never gonna give you up, never gonna let you down, never gonna run around and desert you, never gonna make you cry, never gonna say goodbye, never gonna tell a lie and hurt you")
+print("Never gonna give you up, never gonna let you down, never gonna run around and desert you, never gonna make you cry, never gonna say goodbye, never gonna tell a lie and hurt you.")
 print("May the Force \nbe with you.")
 print("A string is a printed word in python, a string can be a word, letter or sentence printed in a python statement.")
 print("An integer is a number printed out as a whole number in python.")
@@ -10,6 +10,7 @@ print("A float is like an integer - but it shows you the decimal numbers as well
 
 #6-10
 
+print("\n")
 print(543/3)
 print(543//3)
 print(543%3)
@@ -19,6 +20,7 @@ print(434//10)
 
 #11-15
 
+print("\n")
 print(3%2)
 print(5%5)
 print(555/2)
@@ -28,6 +30,7 @@ print(123//2)
 
 #16-20
 
+print("\n")
 print(123%2)
 print(764%2)
 print(165//2)
@@ -36,6 +39,7 @@ print(280 + 92)
 
 #21-25
 
+print("\n")
 print(18 - 7.57)
 print(7.42 - 3)
 print(7/2)
@@ -44,6 +48,7 @@ print(8*5)
 
 #26-31
 
+print("\n")
 print("Dominik Aicken"*10)
 print("\nDominik Aicken"*10)
 print("5+10 ="+str(5+10))

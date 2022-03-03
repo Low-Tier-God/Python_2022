@@ -35,6 +35,7 @@ speed = 140 #km/h
 
 
 #Tests
+print("\n")
 print(user_surname)
 print((user_school)+" is a great school")
 print((user_ffood)+" is the user's favourite food")
@@ -51,25 +52,36 @@ top = 30
 pants = 15
 belt = 60
 shoes = 40
-print("The user has the following amount left:")
+print("\n")
+print("You have the following amount left over:")
 print(money)
+print("\n")
 print("Buying a hat")
 money = money - hat
-print("The user has the following amount left:")
+print("\n")
+print("You have the following amount left over:")
 print(money)
+print("\n")
 print("Buying a top")
 money = money - top
-print("The user has the following amount left:")
+print("\n")
+print("You have the following amount left over:")
 print(money)
+print("\n")
 print("Buying pants")
 money = money - pants
-print("The user has the following amount left:")
+print("\n")
+print("You have the following amount left over:")
 print(money)
+print("\n")
 print("Buying a belt")
 money = money - belt
-print("The user has the following amount left:")
+print("\n")
+print("You have the following amount left over:")
 print(money)
+print("\n")
 print("Buying shoes")
 money = money - shoes
-print("The user has the following amount left:")
+print("\n")
+print("You have the following amount left over:")
 print(money)
