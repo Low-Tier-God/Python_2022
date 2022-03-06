@@ -64,3 +64,16 @@ bitcoins = float(input(f"How many bitcoins do you have?"))
 print("\n")
 bitcoins = bitcoins*62472
 print(f"Your crypto portfolio is worth ${bitcoins} in NZD.")
+income = int(input("How much money do you earn each week?"))
+tax = float(input("How much tax do you pay? (As a decimal, not a percentage. (e.g 1.15))"))
+print(f"You will take home {income/tax} each week after tax.")
+
+#31 - 34
+
+print("\n")
+book2 = input("Please enter the name of a new book.")
+print(str.lower(f"{book2}"))
+print(str.upper(f"{book2}"))
+print(str.title(f"{book2}"))
+num2 = int(input("Please enter a number."))
+print(f"{book2} "*num2)
