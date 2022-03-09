@@ -15,7 +15,7 @@ songs.append("Don't Cry")
 songs.append("T.N.T")
 songs.append("Uptown Funk")
 print(songs)
-"""
+
 books = []
 book1 = input("Please add your fifth favourite book.\n")
 books.append({book1})
@@ -28,3 +28,40 @@ books.append({book4})
 book5 = input("Please add your favourite book.\n")
 books.append({book5})
 print(books)
+"""
+#6
+print("\n")
+pizza_toppings = []
+pizza = False
+
+while pizza == False:
+	topping = input("What toppings for your pizza? - push enter to finish.\n")
+	if topping == "":
+		print("Order Done")
+		pizza = True
+	elif topping.lower() in pizza_toppings:
+		print("You already have that topping.")
+	else:
+		print("Great, we will add that to your pizza.")
+		pizza_toppings.append(topping.lower())
+
+print("Here are your toppings:")
+print(pizza_toppings)
+
+#7
+fruits_in_basket = ["apple","banana","grapes","tomato","orange"]
+basket_is_full = False
+
+while basket_is_full == False:
+	fruit_add = input("Please add a fruit to the basket - push enter to finish\n")
+	if fruit_add == "":
+		print("Okay, the basket is full.")
+		basket_is_full = True
+	elif fruit_add.lower() in fruits_in_basket:
+		print("That fruit is already in the basket.")
+	else:
+		print("Okay, I will add it to the basket.")
+		fruits_in_basket.append(fruit_add.lower())
+
+print("Here are the fruits:")
+print(fruits_in_basket)
