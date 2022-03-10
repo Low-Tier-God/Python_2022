@@ -1,7 +1,7 @@
 #Exercise 8.7
 
 #1-5
-"""
+
 sequence = ["0","1","1","2","3","5","8","13","21","34"]
 print(sequence)
 fruits = ["apples","grapes","bananas","plums","kiwi"]
@@ -28,7 +28,7 @@ books.append({book4})
 book5 = input("Please add your favourite book.\n")
 books.append({book5})
 print(books)
-"""
+
 #6
 print("\n")
 pizza_toppings = []
@@ -49,6 +49,8 @@ print("Here are your toppings:")
 print(pizza_toppings)
 
 #7
+
+print("\n")
 fruits_in_basket = ["apple","banana","grapes","tomato","orange"]
 basket_is_full = False
 
@@ -65,3 +67,28 @@ while basket_is_full == False:
 
 print("Here are the fruits:")
 print(fruits_in_basket)
+
+#8
+
+print("\n")
+names = ["Dominik,","Blake","Kahu","George","Luke","Jaiy","Mitch","Josh","Conner","Jaxxyn","Declan"]
+names.sort()
+print(names)
+names.reverse()
+print(names)
+
+#9
+
+print("\n")
+primenumbers = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71]
+primenumbers.reverse()
+print(primenumbers)
+primenumbers = len(primenumbers)
+print(f"The length of this list is {primenumbers} numbers long")
+
+#10
+
+print("\n")
+verbs = ["Cleaning","Running","Eating","Walking","Going","Making"]
+verbs.sort()
+print(verbs)

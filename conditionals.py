@@ -112,8 +112,8 @@ else:
 	score = score
 
 if score == 0:
-	print(f"You got {score}. It's okay, it wasn't meant to be easy.")
+	print(f"You got {score}/5. It's okay, it wasn't meant to be easy.")
 elif score == 5:
-	print(f"You got {score}. Wow, you're smart!")
+	print(f"You got {score}/5. Wow, you're smart!")
 else:
-	print(f"You got {score}. Nice go!")
+	print(f"You got {score}/5. Nice go!")

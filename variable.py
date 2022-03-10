@@ -10,7 +10,7 @@ user_name = "Dominik"
 
 #6-10
 
-user_age = 37
+user_age = 15
 current_year = 2022
 print(user_name)
 print(user_age)
