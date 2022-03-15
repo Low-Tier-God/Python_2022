@@ -1,5 +1,5 @@
 #Exercise 9.2
-"""
+
 print("Hi, welcome to Ice Cream Maker")
 order_complete = False
 toppings_list = []
@@ -32,7 +32,7 @@ while order_complete == False:
 print("\n")
 print("Here are your toppings:\n")
 print(*toppings_list,sep = "\n")
-"""
+
 #Exercise 9.3
 
 countup = []
