@@ -1,31 +1,15 @@
 from adventurelib import *
-"""
-@when("brush teeth")
-@when("brush")
-@when("clean teeth")
-def brush_teeth():
-	print("You brush your teeth")
-
-@when("comb hair")
-@when("comb")
-def comb_hair():
-	say("""
-		You brush your long flowing locks with 
-		the gold hairbrush that you have selected from the 
-		in the red basket
-		""")
-"""
 
 
 
 space = Room("""
 	You are drifting in space. It feels very cold.
-	A slate-blue airlock sits completely silently in front of you,
-	its airlock open and waiting
+	A slate-blue spaceship sits completely silently in front of you,
+	its spaceship open and waiting
 	""")
 
-airlock = Room("""
-	The bridge of the airlock is shiny and white, with thousands 
+spaceship = Room("""
+	The bridge of the spaceship is shiny and white, with thousands 
 	of small, red, blinking lights, to your left is the hallway, and the quarters are forward
 	""")
 
@@ -56,27 +40,47 @@ mess_hall = Room("""
 escape_pods = Room("""
 	Why are you here? Do you seriously plan on escaping? Turn back to the bridge""")
 
-#variables
-current_room = space
+
 spaceship.east = hallway
 spaceship.south = quarters
 hallway.east == bridge
 hallway.north = cargo
+hallway.west == spaceship
+cargo.east == docking
+hallway.south == mess_hall
+bridge.south == escape_pods
+mess_hall.west == quarters
+
+
+#variables
+
+current_room = space
 print(current_room)
 
-@when("enter airlock")
+@when("enter spaceship")
 @when("enter spaceship")
 @when("enter ship")
-def enter_airlock():
+def enter_spaceship():
 	global current_room
 	if current_room is not space:
-		say("There is no airlock here")
+		say("There is no spaceship here")
 		return
 	else:
-		current_room = airlock
-		say("""You heave yourself into the airlock and slam your hand on the button to close the door.""")
+		current_room = spaceship
+		say("""You heave yourself into the spaceship and slam your hand on the button to close the door.""")
 		print(current_room)
-		
+
+@when("look")
+
+
+@when("go DIRECTION")
+def travel(direction):
+	pass
+	if direction in current_room.exits():
+		current_room = current_room.exit(direction)
+		print(current_room)
+		print(current_room.exits())
+
 
 def main():
 	start()
