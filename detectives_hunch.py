@@ -2,40 +2,42 @@ from adventurelib import *
 Room.items = Bag()
 
 
-space = Room("""
-	You are drifting in space. It feels very cold.
-	A slate-blue spaceship sits completely silently in front of you,
-	its spaceship open and waiting""")
+outside = Room("""
+	You stand outside, in front of you is a house that seems to be abandoned, a radio tower next to it.
+	Your only choice is to investigate the house in the hopes of finding something that can turn on the radio tower.
+	The porch you stand on creaks""")
 
-spaceship = Room("""
-	The bridge of the spaceship is shiny and white, with thousands 
-	of small, red, blinking lights, to your east is the hallway, and the quarters are to the south""")
 
-cargo = Room("""
-	You enter the cargo room. There are thousands of storage
-	boxes holding all kinds of resources, to the east is the docking room""")
+main_hall = Room("""
+	You now stand in the hallway, you can hear rodents running across the board, it is dark.
+	You feel adrenaline from fear pumping inside you, and you feel like you are being watched.
+	The feeling to run away is looming over you.""")
 
-docking = Room("""
+lounge = Room("""
+	You stand in the lounge, unable to collect your thoughts, you hear an eerie noise with an unknown location.
+	You can hear your teeth chattering, it's very cold inside.""")
+
+kitchen = Room("""
 	The docking room is completely empty, with a ton of tempting buttons to press
 	the cargo room is now to your west""")
 
-hallway = Room("""
+second_hall = Room("""
 	Upon entering the hallway, it is brightened by hundreds of lights to illuminate your path,
 	your available options here is back to the spaceship, the cargo room, to the bridge or the mess hall""")
 
-bridge = Room("""
+bedroom = Room("""
 	Despite there being no reason to enter the bridge compartment, you enter anyway
 	There's nothing except a locked bridge entry way, the escape pods are south from your position""")
 
-quarters = Room("""
+bathroom = Room("""
 	The quarters are filled with beds and drawers of your fellow crewmates,
 	the spaceship room is north from you and the mess hall is to your east""")
 
-mess_hall = Room("""
+bathroom = Room("""
 	At the table are your fellow crewmates, though they don't look interested in conversing,
 	the hallway is north from you and the quarters are to your west""")
 
-escape_pods = Room("""
+radio_tower = Room("""
 	Why are you here? Do you seriously plan on escaping? Turn back to the bridge""")
 
 hallway.north = cargo
