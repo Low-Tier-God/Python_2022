@@ -18,36 +18,45 @@ lounge = Room("""
 	You can hear your teeth chattering, it's very cold inside.""")
 
 kitchen = Room("""
-	The docking room is completely empty, with a ton of tempting buttons to press
-	the cargo room is now to your west""")
+	You enter the kitchen and to your surprise, the light switch works this time, there is an unfamiliar scent and you can hear the buzzing of the light above you.
+	You see the sink filled with filthy water and rusty kitchen appliances.""")
 
 second_hall = Room("""
-	Upon entering the hallway, it is brightened by hundreds of lights to illuminate your path,
-	your available options here is back to the spaceship, the cargo room, to the bridge or the mess hall""")
+	You stand in the next hallway, the dust inside is causing you to sniffle. The feeling of being watched is becoming harsher.
+	You shiver from fear, the carpet seems to be wet, with liquid dripping from the wallpaper.""")
 
 bedroom = Room("""
-	Despite there being no reason to enter the bridge compartment, you enter anyway
-	There's nothing except a locked bridge entry way, the escape pods are south from your position""")
+	You enter the bedroom, the first thing you notice is the massive, luxurious bed. You have a feeling that it calls you to sleep on it,
+	you resist that temptation.
+	Aside from the bed, there are a few drawers and a closet, maybe it's best to check those?""")
 
 bathroom = Room("""
-	The quarters are filled with beds and drawers of your fellow crewmates,
-	the spaceship room is north from you and the mess hall is to your east""")
-
-bathroom = Room("""
-	At the table are your fellow crewmates, though they don't look interested in conversing,
-	the hallway is north from you and the quarters are to your west""")
+	The hallway has mold all over the curtains and tiles, the smell is hindering your ability to breathe.
+	The faucet has water dropping from it, making a tiny, but audible splash sound when it hits the sink.
+	You feel uncomfortable, you are only worried about getting out of there.""")
 
 radio_tower = Room("""
-	Why are you here? Do you seriously plan on escaping? Turn back to the bridge""")
+	The electricity station outside is making a loud buzzing noise, you open the door but quickly shut it upon hearing crunching leaves behind you.
+	You look outside and realize it was only the wind,
+	There is plugs and a dead battery, maybe try swapping the dead battery with the one you found?""")
 
-hallway.north = cargo
-hallway.east = bridge
-hallway.south = mess_hall
-hallway.west = spaceship
-mess_hall.west = quarters
-bridge.south = escape_pods
-cargo.east = docking
-quarters.north = spaceship
+basement = room("""
+	You go down the flight of stairs leading to the basement, when you reach the bottom you hear footsteps above the basement
+	...
+	You hear a laugh, the basement door slams shut,
+	You climb back up, desperately trying to lift the door, but it's stuck for good.
+	You look for any tools that might help, but it's empty, and too dark to see anything.
+	You realize that you've just fallen into a trap and you will be spending your last few days down here.
+	Sucks to be you.""")
+
+outside.north = main_hall
+main_hall.east = bathroom
+main_hall.west = second_hall
+main_hall.north = lounge
+lounge.north = kitchen
+second_hall.north = bedroom
+outside.east = radio_tower
+second_hall.basement = basement
 
 
 #define items go here
@@ -56,20 +65,16 @@ Item.description = ""
 knife = Item("a dirty knife","knife")
 knife.description = "the knife has a dull sheen to it but it looks rather sharp."
 
-red_keycard = Item("a red keycard","rkeycard","red card","red keycard")
-red_keycard.description = "It's a red keycard. It probably opens a door or a locker."
+silver_key = Item("silver key","a silver key","the silver key","skey")
+silver_key.description = "the key shines faintly, it has a rough, metallic feeling. You put it back in your pocket."
 
-green_keycard = Item("a green keycard","gkeycard","green card","green keycard")
-green_keycard.description = "It's a green keycard, It probably opens a door or a locker... or something else?"
+gold_key = Item("gold key","a gold key","the gold key","gkey","key")
+gold_key.description = "the key feels smooth feeling, althought it is scratched and rusted in sode places. You put it back in your pocket."
 
-blue_keycard = Item("a blue keycard","bkeycard","blue card","blue keycard")
-blue_keycard.description = "It's a blue keycard. It probably opens a door or a locker."
+
 
 #define bags go here
-mess_hall.items.add(red_keycard)
-cargo.items.add(knife)
-docking.items.add(green_keycard)
-quarters.items.add(blue_keycard)
+
 
 #adding items to bags code goes here
 @when("get ITEM")
@@ -86,23 +91,25 @@ def pickup(item):
 
 #variables go here
 
-current_room = space
+current_room = outside
 print(current_room)
 inventory = Bag()
 
 #current room you start in when starting the code
 
-@when("enter spaceship")
-@when("enter spaceship")
-@when("enter ship")
-def enter_spaceship():
+@when("enter inside")
+@when("enter house")
+@when("enter hall")
+def enter_house():
 	global current_room
-	if current_room is not space:
-		say("There is no spaceship here")
+	if current_room is not outside:
+		say("There is no house here")
 		return
 	else:
-		current_room = spaceship
-		say("""You heave yourself into the spaceship and slam your hand on the button to close the door.""")
+		current_room = main_hall
+		say("""You swing open the door and immediately feel your hand across the wall to find a light switch.
+			The wallpaper is smooth, and you find the switch, upon flicking the light on, you are met with a dim light with an audible buzzing sound.
+			""")
 		print(current_room)
 
 @when("look")
