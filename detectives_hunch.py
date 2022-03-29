@@ -15,7 +15,7 @@ main_hall = Room("""
 
 lounge = Room("""
 	You stand in the lounge, unable to collect your thoughts, you hear an eerie noise with an unknown location.
-	You can hear your teeth chattering, it's very cold inside.""")
+	You can hear your teeth chattering, it's very cold inside. There is the entrance to a kitchen in the lounge.""")
 
 kitchen = Room("""
 	You enter the kitchen and to your surprise, the light switch works this time, there is an unfamiliar scent and you can hear the buzzing of the light above you.
@@ -40,7 +40,7 @@ radio_tower = Room("""
 	You look outside and realize it was only the wind,
 	There is plugs and a dead battery, maybe try swapping the dead battery with the one you found?""")
 
-basement = room("""
+basement = Room("""
 	You go down the flight of stairs leading to the basement, when you reach the bottom you hear footsteps above the basement
 	...
 	You hear a laugh, the basement door slams shut,
@@ -53,10 +53,8 @@ outside.north = main_hall
 main_hall.east = bathroom
 main_hall.west = second_hall
 main_hall.north = lounge
-lounge.north = kitchen
 second_hall.north = bedroom
 outside.east = radio_tower
-second_hall.basement = basement
 
 
 #define items go here
@@ -75,6 +73,8 @@ gold_key.description = "the key feels smooth feeling, althought it is scratched 
 
 #define bags go here
 
+bedroom.add(silver_key)
+kitchen.add(gold_key)
 
 #adding items to bags code goes here
 @when("get ITEM")
@@ -111,6 +111,23 @@ def enter_house():
 			The wallpaper is smooth, and you find the switch, upon flicking the light on, you are met with a dim light with an audible buzzing sound.
 			""")
 		print(current_room)
+
+@when("enter kitchen")
+@when("go to kitchen")
+@when("go inside kitchen")
+def enter_house():
+	global current_room
+	if current_room is not lounge:
+		say("There is no kitchen here")
+		return
+	elif silver_key is not in inventory:
+		say("You need some sort of key to enter as it is locked.")
+		return
+	else:
+		current_room = kitchen
+		say("""You unlock the door and enter the kitchen""")
+		print(current_room)
+
 
 @when("look")
 def look():
@@ -149,7 +166,6 @@ def travel(direction):
 	if direction in current_room.exits():
 		current_room = current_room.exit(direction)
 		print(current_room)
-
 
 def main():
 	start()
