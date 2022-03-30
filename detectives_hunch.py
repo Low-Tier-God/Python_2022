@@ -5,7 +5,7 @@ Room.items = Bag()
 outside = Room("""
 	You stand outside, in front of you is a house that seems to be abandoned, a radio tower next to it.
 	Your only choice is to investigate the house in the hopes of finding something that can turn on the radio tower.
-	The porch you stand on creaks""")
+	The porch you stand on creaks, the radio tower sits next to the house.""")
 
 
 main_hall = Room("""
@@ -15,7 +15,7 @@ main_hall = Room("""
 
 lounge = Room("""
 	You stand in the lounge, unable to collect your thoughts, you hear an eerie noise with an unknown location.
-	You can hear your teeth chattering, it's very cold inside. There is the entrance to a kitchen in the lounge.""")
+	You can hear your teeth chattering, it's very cold inside. There is the entrance to the kitchen.""")
 
 kitchen = Room("""
 	You enter the kitchen and to your surprise, the light switch works this time, there is an unfamiliar scent and you can hear the buzzing of the light above you.
@@ -36,9 +36,8 @@ bathroom = Room("""
 	You feel uncomfortable, you are only worried about getting out of there.""")
 
 radio_tower = Room("""
-	The electricity station outside is making a loud buzzing noise, you open the door but quickly shut it upon hearing crunching leaves behind you.
-	You look outside and realize it was only the wind,
-	There is plugs and a dead battery, maybe try swapping the dead battery with the one you found?""")
+	The dust flying around the tower is hindering your view, the moment you turn the light on, a swam of moths fills the room, irritated, you scan the room for any plugs.
+	There is a bunch of plugs connected to a generator a radio sits by, you can choose to plug in the battery, but you also see a key on the table, which spikes your curiosity.""")
 
 basement = Room("""
 	You go down the flight of stairs leading to the basement, when you reach the bottom you hear footsteps above the basement
@@ -50,31 +49,34 @@ basement = Room("""
 	Sucks to be you.""")
 
 outside.north = main_hall
-main_hall.east = bathroom
 main_hall.west = second_hall
 main_hall.north = lounge
 second_hall.north = bedroom
-outside.east = radio_tower
-
 
 #define items go here
 Item.description = ""
 
 knife = Item("a dirty knife","knife")
-knife.description = "the knife has a dull sheen to it but it looks rather sharp."
+knife.description = "The knife has a dull sheen to it but it looks rather sharp."
 
 silver_key = Item("silver key","a silver key","the silver key","skey")
-silver_key.description = "the key shines faintly, it has a rough, metallic feeling. You put it back in your pocket."
+silver_key.description = "The key shines faintly, it has a rough, metallic feeling. You put it back in your pocket."
 
 gold_key = Item("gold key","a gold key","the gold key","gkey","key")
-gold_key.description = "the key feels smooth feeling, althought it is scratched and rusted in sode places. You put it back in your pocket."
+gold_key.description = "The key feels smooth feeling, althought it is scratched and rusted in some places. You put it back in your pocket."
 
+battery = Item("battery","a bettery","the battery","batteries")
+battery.description = "You lift the battery you hold in your hand, it's heavy; but you don't let anything weigh you down even in the scariest of times."
 
+rusty_key = Item("rusty key","a rusty key","the rusty key","rkey")
+rusty_key.description = "It's gritty and hollow, the key gives you a bad feeling. It looks fit for the basement in the second hallway."
 
 #define bags go here
 
-bedroom.add(silver_key)
-kitchen.add(gold_key)
+bedroom.items.add(silver_key)
+kitchen.items.add(gold_key)
+bathroom.items.add(battery)
+radio_tower.add(rusty_key)
 
 #adding items to bags code goes here
 @when("get ITEM")
@@ -100,9 +102,10 @@ inventory = Bag()
 @when("enter inside")
 @when("enter house")
 @when("enter hall")
+@when("enter the house")
 def enter_house():
 	global current_room
-	if current_room is not outside:
+	if current_room is not outside: #Checks if outside
 		say("There is no house here")
 		return
 	else:
@@ -110,23 +113,80 @@ def enter_house():
 		say("""You swing open the door and immediately feel your hand across the wall to find a light switch.
 			The wallpaper is smooth, and you find the switch, upon flicking the light on, you are met with a dim light with an audible buzzing sound.
 			""")
+
+@when("enter basement")
+@when("go to basement")
+@when("go inside basement")
+@when("enter the basement")
+def enter_house():
+	global current_room
+	if current_room is not outside:
+		say("There is no radio tower here")
+		return
+	elif rusty_key not in inventory: #Item required before entering
+		say("You need some sort of key to enter as it is locked.")
+		return
+	else:
+		current_room = basement
+		say("""You unlock the door and enter the basement.""")
 		print(current_room)
 
 @when("enter kitchen")
 @when("go to kitchen")
 @when("go inside kitchen")
+@when("enter the kitchen")
 def enter_house():
 	global current_room
 	if current_room is not lounge:
 		say("There is no kitchen here")
 		return
-	elif silver_key is not in inventory:
+	elif silver_key not in inventory: #Item required before entering
 		say("You need some sort of key to enter as it is locked.")
 		return
 	else:
 		current_room = kitchen
-		say("""You unlock the door and enter the kitchen""")
+		say("""You unlock the door and enter the kitchen.""")
 		print(current_room)
+
+@when("enter bathroom")
+@when("go to bathroom")
+@when("go inside bathroom")
+def enter_house():
+	global current_room
+	if current_room is not main_hall:
+		say("There is no kitchen here")
+		return
+	elif gold_key not in inventory: #Item required before entering
+		say("You need some sort of key to enter as it is locked.")
+		return
+	else:
+		current_room = kitchen
+		say("""You unlock the door and enter the bathroom.""")
+		print(current_room)
+
+@when("enter radio tower")
+@when("go to radio tower")
+@when("go inside radio tower")
+def enter_house():
+	global current_room
+	if current_room is not outside:
+		say("There is no radio tower here")
+		return
+	elif battery not in inventory:
+		say("You need some sort of key to enter as it is locked.")
+		return
+	else:
+		current_room = radio_tower
+		say("""The electricity station outside is making a loud buzzing noise, you open the door but quickly shut it upon hearing crunching leaves behind you.
+	You look outside and realize it was only the wind. You flick the lights on.""")
+		print(current_room)
+
+@when("plug in battery") #-----------------Removes the battery from inventory when you use it.------------------------
+@when("use battery")
+@when("plug battery in")
+@when("connect battery")
+@when("connect battery to plugs")
+def use_battery():
 
 
 @when("look")
@@ -139,6 +199,13 @@ def look():
 		for item in current_room.items:
 			print(item)#prints out each items
 
+if current_room == radio_tower
+	if rusty_key not in inventory
+		say("""The dust flying around the tower is hindering your view, the moment you turn the light on, a swam of moths fills the room, irritated, you scan the room for any plugs.
+		There is a bunch of plugs connected to a generator a radio sits by, you can choose to plug in the battery- but you also see a rusty key on the table, which spikes your curiosity.""")
+	else:
+		say("""The dust flying around the tower is hindering your view, the moment you turn the light on, a swam of moths fills the room, irritated, you scan the room for any plugs.
+	There is a bunch of plugs connected to a generator a radio sits by, you can choose to plug in the battery or loiter.""")
 
 @when("inventory")
 @when("show inventory")
