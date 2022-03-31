@@ -76,7 +76,7 @@ rusty_key.description = "It's gritty and hollow, the key gives you a bad feeling
 bedroom.items.add(silver_key)
 kitchen.items.add(gold_key)
 bathroom.items.add(battery)
-radio_tower.add(rusty_key)
+radio_tower.items.add(rusty_key)
 
 #adding items to bags code goes here
 @when("get ITEM")
@@ -96,6 +96,7 @@ def pickup(item):
 current_room = outside
 print(current_room)
 inventory = Bag()
+batteryon = False
 
 #current room you start in when starting the code
 
@@ -120,7 +121,7 @@ def enter_house():
 @when("enter the basement")
 def enter_house():
 	global current_room
-	if current_room is not outside:
+	if current_room is not second_hall:
 		say("There is no radio tower here")
 		return
 	elif rusty_key not in inventory: #Item required before entering
@@ -172,8 +173,8 @@ def enter_house():
 	if current_room is not outside:
 		say("There is no radio tower here")
 		return
-	elif battery not in inventory:
-		say("You need some sort of key to enter as it is locked.")
+	elif battery not in inventory: #Battery required for entry
+		say("There's no point in going in without the battery.")
 		return
 	else:
 		current_room = radio_tower
@@ -181,12 +182,16 @@ def enter_house():
 	You look outside and realize it was only the wind. You flick the lights on.""")
 		print(current_room)
 
-@when("plug in battery") #-----------------Removes the battery from inventory when you use it.------------------------
+@when("plug in battery") #Removes the battery from inventory when you use it and unlocks the ability to use the radio
 @when("use battery")
 @when("plug battery in")
 @when("connect battery")
 @when("connect battery to plugs")
 def use_battery():
+	say("You place the battery down and put the plugs into it, a button glows indicating that it is functioning.")
+	battery.remove(inventory)
+	batteryon = True
+
 
 
 @when("look")
@@ -199,13 +204,12 @@ def look():
 		for item in current_room.items:
 			print(item)#prints out each items
 
-if current_room == radio_tower
-	if rusty_key not in inventory
-		say("""The dust flying around the tower is hindering your view, the moment you turn the light on, a swam of moths fills the room, irritated, you scan the room for any plugs.
-		There is a bunch of plugs connected to a generator a radio sits by, you can choose to plug in the battery- but you also see a rusty key on the table, which spikes your curiosity.""")
+if current_room == radio_tower:
+	if rusty_key not in inventory:
+		print(current_room)
 	else:
 		say("""The dust flying around the tower is hindering your view, the moment you turn the light on, a swam of moths fills the room, irritated, you scan the room for any plugs.
-	There is a bunch of plugs connected to a generator a radio sits by, you can choose to plug in the battery or loiter.""")
+	There is a bunch of plugs connected to a generator a radio sits by, you can choose to plug in the battery or loiter.""") #Different dialogue if rusty key is already picked up
 
 @when("inventory")
 @when("show inventory")
