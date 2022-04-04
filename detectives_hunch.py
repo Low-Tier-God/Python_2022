@@ -78,6 +78,7 @@ kitchen.items.add(gold_key)
 bathroom.items.add(battery)
 radio_tower.items.add(rusty_key)
 
+
 #adding items to bags code goes here
 @when("get ITEM")
 @when("take ITEM")
@@ -97,6 +98,7 @@ current_room = outside
 print(current_room)
 inventory = Bag()
 batteryon = False
+
 
 #current room you start in when starting the code
 
@@ -141,7 +143,7 @@ def enter_house():
 	if current_room is not lounge:
 		say("There is no kitchen here")
 		return
-	elif silver_key not in inventory: #Item required before entering
+	elif silver_key not in inventory: #Item required before entering              #needs fixed
 		say("You need some sort of key to enter as it is locked.")
 		return
 	else:
@@ -231,12 +233,28 @@ def inspect(item):
 	else:
 		print(f"You aren't carrying an {item}")
 
+@when("use ITEM")
+def use(item):
+	if inventory.find(item)==silver_key and current_room == lounge:
+		print("You use the key to unlock the kitchen door.")
+		print("The door to the kitchen creaks as it swings open.")
+		lounge.north = kitchen
+	else:
+		print("You can use that here")
+
 @when("go DIRECTION")
 def travel(direction):
 	global current_room
+	
+	if current_room == lounge and direction == 'north':
+		print("The door to the kitchen is locked.")
+
 	if direction in current_room.exits():
 		current_room = current_room.exit(direction)
-		print(current_room)
+		print(f'You go {direction}.')
+	else:
+		print("You can't go that way.")
+
 
 def main():
 	start()
