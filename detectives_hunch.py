@@ -52,6 +52,7 @@ outside.north = main_hall
 main_hall.west = second_hall
 main_hall.north = lounge
 second_hall.north = bedroom
+outside.east = radio_tower	
 
 #define items go here
 Item.description = ""
@@ -167,22 +168,6 @@ def enter_house():
 		say("""You unlock the door and enter the bathroom.""")
 		print(current_room)
 
-@when("enter radio tower")
-@when("go to radio tower")
-@when("go inside radio tower")
-def enter_house():
-	global current_room
-	if current_room is not outside:
-		say("There is no radio tower here")
-		return
-	elif battery not in inventory: #Battery required for entry
-		say("There's no point in going in without the battery.")
-		return
-	else:
-		current_room = radio_tower
-		say("""The electricity station outside is making a loud buzzing noise, you open the door but quickly shut it upon hearing crunching leaves behind you.
-	You look outside and realize it was only the wind. You flick the lights on.""")
-		print(current_room)
 
 @when("plug in battery") #Removes the battery from inventory when you use it and unlocks the ability to use the radio
 @when("use battery")
@@ -205,6 +190,8 @@ def look():
 		print("However, you also see:")
 		for item in current_room.items:
 			print(item)#prints out each items
+	elif current_room == radio_tower:
+		say("""It's too bright to see anything, not to mention the moths hindering your view.""")
 
 if current_room == radio_tower:
 	if rusty_key not in inventory:
@@ -239,15 +226,21 @@ def use(item):
 		print("You use the key to unlock the kitchen door.")
 		print("The door to the kitchen creaks as it swings open.")
 		lounge.north = kitchen
+	if inventory.find(item)==gold_key and current_room == main_hall:
+		print("You use the key to unlock the bathroom door.")
+		print("It takes a few attempts to fit the key in, but it unlocks just fine.")
+		main_hall.east = bathroom
 	else:
-		print("You can use that here")
+		print("You can't use that here")
 
 @when("go DIRECTION")
 def travel(direction):
 	global current_room
-	
 	if current_room == lounge and direction == 'north':
 		print("The door to the kitchen is locked.")
+
+	if current_room == main_hall and direction == 'east':
+		print("The door to the bathroom is locked.")
 
 	if direction in current_room.exits():
 		current_room = current_room.exit(direction)
