@@ -99,7 +99,8 @@ current_room = outside
 print(current_room)
 inventory = Bag()
 batteryon = False
-
+kitchen_unlocked = False
+bathroom_unlocked = False
 
 #current room you start in when starting the code
 
@@ -118,23 +119,6 @@ def enter_house():
 			The wallpaper is smooth, and you find the switch, upon flicking the light on, you are met with a dim light with an audible buzzing sound.
 			""")
 
-@when("enter basement")
-@when("go to basement")
-@when("go inside basement")
-@when("enter the basement")
-def enter_house():
-	global current_room
-	if current_room is not second_hall:
-		say("There is no radio tower here")
-		return
-	elif rusty_key not in inventory: #Item required before entering
-		say("You need some sort of key to enter as it is locked.")
-		return
-	else:
-		current_room = basement
-		say("""You unlock the door and enter the basement.""")
-		print(current_room)
-
 @when("enter kitchen")
 @when("go to kitchen")
 @when("go inside kitchen")
@@ -144,30 +128,6 @@ def enter_house():
 	if current_room is not lounge:
 		say("There is no kitchen here")
 		return
-	elif silver_key not in inventory: #Item required before entering              #needs fixed
-		say("You need some sort of key to enter as it is locked.")
-		return
-	else:
-		current_room = kitchen
-		say("""You unlock the door and enter the kitchen.""")
-		print(current_room)
-
-@when("enter bathroom")
-@when("go to bathroom")
-@when("go inside bathroom")
-def enter_house():
-	global current_room
-	if current_room is not main_hall:
-		say("There is no kitchen here")
-		return
-	elif gold_key not in inventory: #Item required before entering
-		say("You need some sort of key to enter as it is locked.")
-		return
-	else:
-		current_room = kitchen
-		say("""You unlock the door and enter the bathroom.""")
-		print(current_room)
-
 
 @when("plug in battery") #Removes the battery from inventory when you use it and unlocks the ability to use the radio
 @when("use battery")
@@ -179,7 +139,17 @@ def use_battery():
 	battery.remove(inventory)
 	batteryon = True
 
-
+@when("use silver key")
+@when("use the silver key")
+@when("use a silver key")
+@when("unlock kitchen")
+def unlock_kitchen():
+	if current_room is not lounge:
+		say("You cannot use that here.")
+	elif current_room is lounge and inventory.find("silver_key"):
+		say("You unlock the kitchen door.")
+		inventory.remove(silver_key)
+		kitchen_unlocked = True
 
 @when("look")
 def look():
@@ -220,26 +190,17 @@ def inspect(item):
 	else:
 		print(f"You aren't carrying an {item}")
 
-@when("use ITEM")
-def use(item):
-	if inventory.find(item)==silver_key and current_room == lounge:
-		print("You use the key to unlock the kitchen door.")
-		print("The door to the kitchen creaks as it swings open.")
-		lounge.north = kitchen
-	if inventory.find(item)==gold_key and current_room == main_hall:
-		print("You use the key to unlock the bathroom door.")
-		print("It takes a few attempts to fit the key in, but it unlocks just fine.")
-		main_hall.east = bathroom
-	else:
-		print("You can't use that here")
-
 @when("go DIRECTION")
 def travel(direction):
 	global current_room
-	if current_room == lounge and direction == 'north':
+	if current_room == lounge and kitchen_unlocked == False and direction == 'north':
 		print("The door to the kitchen is locked.")
+		return
 
-	if current_room == main_hall and direction == 'east':
+	elif current_room == lounge and kitchen_unlocked == True and direction == 'north':
+		current_room = kitchen
+
+	if current_room == main_hall and bathroom_unlocked == False and direction == 'east':
 		print("The door to the bathroom is locked.")
 
 	if direction in current_room.exits():
