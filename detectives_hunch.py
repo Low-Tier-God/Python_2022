@@ -143,14 +143,16 @@ def use_battery():
 @when("use the silver key")
 @when("use a silver key")
 @when("unlock kitchen")
+@when("unlock kitchen door")
+@when("unlock the kitchen door")
 def unlock_kitchen():
-	if current_room is not lounge:
-		say("You cannot use that here.")
-	elif current_room is lounge and inventory.find("silver_key"):
+	if current_room is lounge and inventory.find("silver_key"):
 		say("You unlock the kitchen door.")
-		inventory.remove(silver_key)
+		#inventory.remove("silver_key")
 		kitchen_unlocked = True
-
+	elif current_room is not lounge:
+		say("You cannot use that here.")
+		
 @when("look")
 def look():
 	print(current_room)
@@ -193,12 +195,15 @@ def inspect(item):
 @when("go DIRECTION")
 def travel(direction):
 	global current_room
-	if current_room == lounge and kitchen_unlocked == False and direction == 'north':
+	
+	if current_room == lounge and kitchen_unlocked == True and direction == 'north':
+		current_room = kitchen	
+
+	elif current_room == lounge and kitchen_unlocked == False and direction == 'north':
 		print("The door to the kitchen is locked.")
 		return
 
-	elif current_room == lounge and kitchen_unlocked == True and direction == 'north':
-		current_room = kitchen
+
 
 	if current_room == main_hall and bathroom_unlocked == False and direction == 'east':
 		print("The door to the bathroom is locked.")
