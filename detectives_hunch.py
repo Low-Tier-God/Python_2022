@@ -104,21 +104,6 @@ bathroom_unlocked = False
 
 #current room you start in when starting the code
 
-@when("enter inside")
-@when("enter house")
-@when("enter hall")
-@when("enter the house")
-def enter_house():
-	global current_room
-	if current_room is not outside: #Checks if outside
-		say("There is no house here")
-		return
-	else:
-		current_room = main_hall
-		say("""You swing open the door and immediately feel your hand across the wall to find a light switch.
-			The wallpaper is smooth, and you find the switch, upon flicking the light on, you are met with a dim light with an audible buzzing sound.
-			""")
-
 @when("enter kitchen")
 @when("go to kitchen")
 @when("go inside kitchen")
@@ -139,20 +124,7 @@ def use_battery():
 	battery.remove(inventory)
 	batteryon = True
 
-@when("use silver key")
-@when("use the silver key")
-@when("use a silver key")
-@when("unlock kitchen")
-@when("unlock kitchen door")
-@when("unlock the kitchen door")
-def unlock_kitchen():
-	if current_room is lounge and inventory.find("silver_key"):
-		say("You unlock the kitchen door.")
-		#inventory.remove("silver_key")
-		kitchen_unlocked = True
-	elif current_room is not lounge:
-		say("You cannot use that here.")
-		
+
 @when("look")
 def look():
 	print(current_room)
@@ -192,6 +164,21 @@ def inspect(item):
 	else:
 		print(f"You aren't carrying an {item}")
 
+
+@when("use silver key")
+@when("use the silver key")
+@when("use a silver key")
+@when("unlock kitchen")
+@when("unlock kitchen door")
+@when("unlock the kitchen door")
+def unlock_kitchen():
+	if current_room is lounge and inventory.find("silver_key"):
+		say("You unlock the kitchen door.")
+		#inventory.remove("silver_key")
+		kitchen_unlocked = True
+	elif current_room is not lounge:
+		say("You cannot use that here.")
+
 @when("go DIRECTION")
 def travel(direction):
 	global current_room
@@ -202,8 +189,6 @@ def travel(direction):
 	elif current_room == lounge and kitchen_unlocked == False and direction == 'north':
 		print("The door to the kitchen is locked.")
 		return
-
-
 
 	if current_room == main_hall and bathroom_unlocked == False and direction == 'east':
 		print("The door to the bathroom is locked.")
