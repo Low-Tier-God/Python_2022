@@ -18,8 +18,8 @@ lounge = Room("""
 	You can hear your teeth chattering, it's very cold inside. There is the entrance to the kitchen.""")
 
 kitchen = Room("""
-	You enter the kitchen and to your surprise, the light switch works this time, there is an unfamiliar scent and you can hear the buzzing of the light above you.
-	You see the sink filled with filthy water and rusty kitchen appliances.""")
+	You stand in the kitchen and to your surprise, the light switch works this time, there is an unfamiliar scent and you can hear the buzzing of the light above you.
+	You see the sink filled with filthy water and rusty kitchen appliances. The room is filled with mold.""")
 
 second_hall = Room("""
 	You stand in the next hallway, the dust inside is causing you to sniffle. The feeling of being watched is becoming harsher.
@@ -101,8 +101,13 @@ inventory = Bag()
 batteryon = False
 kitchen_unlocked = False
 bathroom_unlocked = False
+basement_unlocked = False
+witches = 1000
 
 #current room you start in when starting the code
+
+if witches <= 0:
+	print("go get some witches")
 
 @when("enter kitchen")
 @when("go to kitchen")
@@ -120,9 +125,13 @@ def enter_house():
 @when("connect battery")
 @when("connect battery to plugs")
 def use_battery():
-	say("You place the battery down and put the plugs into it, a button glows indicating that it is functioning.")
-	battery.remove(inventory)
-	batteryon = True
+	global batteryon
+	if current_room == radio_tower:
+		say("You place the battery down and put the plugs into it, a button glows indicating that it is functioning.")
+		#battery.remove(inventory)
+		batteryon = True
+	elif battery is not in inventory:
+		say("You need actually a battery to do that")
 
 
 @when("look")
@@ -172,23 +181,65 @@ def inspect(item):
 @when("unlock kitchen door")
 @when("unlock the kitchen door")
 def unlock_kitchen():
-	if current_room is lounge and inventory.find("silver_key"):
+	global kitchen_unlocked
+	if current_room == lounge and inventory.find("silver key"):
 		say("You unlock the kitchen door.")
 		#inventory.remove("silver_key")
 		kitchen_unlocked = True
 	elif current_room is not lounge:
 		say("You cannot use that here.")
 
+@when("use gold key")
+@when("use the gold key")
+@when("use a gold key")
+@when("unlock bathroom")
+@when("unlock bathroom door")
+@when("unlock the bathroom door")
+def unlock_bathroom():
+	global bathroom_unlocked
+	if current_room == main_hall and inventory.find("gold key"):
+		say("You unlock the bathroom door.")
+		#inventory.remove("silver_key")
+		bathroom_unlocked = True
+	elif current_room is not main_hall:
+		say("You cannot use that here.")
+
+@when("use rusty key")
+@when("use the rusty key")
+@when("use a rusty key")
+@when("unlock basement")
+@when("unlock basement door")
+@when("unlock the basement door")
+def unlock_basement():
+	global basement_unlocked
+	if current_room == second_hall and inventory.find("rusty key"):
+		say("You unlock the basement door.")
+		#inventory.remove("rusty_key")
+		basement_unlocked = True
+	elif current_room is not second_hall:
+		say("You cannot use that here.")
+
+
 @when("go DIRECTION")
 def travel(direction):
 	global current_room
 	
-	if current_room == lounge and kitchen_unlocked == True and direction == 'north':
-		current_room = kitchen	
+	if kitchen_unlocked == True:
+		lounge.north = kitchen	
 
-	elif current_room == lounge and kitchen_unlocked == False and direction == 'north':
+	if current_room == lounge and kitchen_unlocked == False and direction == 'north':
 		print("The door to the kitchen is locked.")
 		return
+
+	if basement_unlocked == True:
+		second_hall.west = basement
+
+	if current_room == second_hall and basement_unlocked == False and direction == 'below':
+		print("The door to the basement is locked")
+		return
+
+	if bathroom_unlocked == True:
+		main_hall.east = bathroom
 
 	if current_room == main_hall and bathroom_unlocked == False and direction == 'east':
 		print("The door to the bathroom is locked.")
@@ -196,6 +247,7 @@ def travel(direction):
 	if direction in current_room.exits():
 		current_room = current_room.exit(direction)
 		print(f'You go {direction}.')
+		print(current_room)
 	else:
 		print("You can't go that way.")
 
