@@ -36,7 +36,7 @@ bathroom = Room("""
 	You feel uncomfortable, you are only worried about getting out of there.""")
 
 radio_tower = Room("""
-	The dust flying around the tower is hindering your view, the moment you turn the light on, a swam of moths fills the room, irritated, you scan the room for any plugs.
+	The dust flying around the tower is hindering your view, the moment you turn the light on, a swarm of moths fills the room, irritated, you scan the room for any plugs.
 	There is a bunch of plugs connected to a generator which a radio sits by, you can choose to plug in the battery, but you also see a key on the table, which spikes your curiosity.""")
 
 basement = Room("""
@@ -57,19 +57,16 @@ outside.east = radio_tower
 #define items go here
 Item.description = ""
 
-knife = Item("a dirty knife","knife")
-knife.description = "The knife has a dull sheen to it but it looks rather sharp."
-
-silver_key = Item("silver key","a silver key","the silver key","skey")
+silver_key = Item("silver key","a silver key","the silver key")
 silver_key.description = "The key shines faintly, it has a rough, metallic feeling. You put it back in your pocket."
 
-gold_key = Item("gold key","a gold key","the gold key","gkey","key")
+gold_key = Item("gold key","a gold key","the gold key","key")
 gold_key.description = "The key feels smooth feeling, althought it is scratched and rusted in some places. You put it back in your pocket."
 
 battery = Item("battery","a battery","the battery","batteries")
 battery.description = "You lift the battery you hold in your hand, it's heavy; but you don't let anything weigh you down even in the scariest of times."
 
-rusty_key = Item("rusty key","a rusty key","the rusty key","rkey")
+rusty_key = Item("rusty key","a rusty key","the rusty key")
 rusty_key.description = "It's gritty and hollow, the key gives you a bad feeling. It looks fit for the basement in the second hallway."
 
 #define bags go here
@@ -102,22 +99,8 @@ batteryon = False
 kitchen_unlocked = False
 bathroom_unlocked = False
 basement_unlocked = False
-witches = 1000
 
 #current room you start in when starting the code
-
-if witches == 0:
-	print("go get some witches")
-
-@when("enter kitchen")
-@when("go to kitchen")
-@when("go inside kitchen")
-@when("enter the kitchen")
-def enter_house():
-	global current_room
-	if current_room is not lounge:
-		say("There is no kitchen here")
-		return
 
 @when("plug in battery") #Removes the battery from inventory when you use it and unlocks the ability to use the radio
 @when("use battery")
@@ -127,33 +110,25 @@ def enter_house():
 def use_battery():
 	global batteryon
 	if current_room == radio_tower:
-		say("You place the battery down and put the plugs into it, a button glows indicating that it is functioning.")
+		say("You place the battery down and put the plugs into it, a button glows indicating that it is functioning. You can now use the radio.")
 		inventory.remove(battery)
 		batteryon = True
 	elif current_room == radio_tower and battery not in inventory and batteryon == True:
 		say("You've already plugged the battery in")
 	else:
-		say("You need actually a battery to do that")
+		say("You actually need a battery to do that")
 
 
 @when("look")
 def look():
-	print(current_room)
 	say("You look around for any possible exits:")
 	print(current_room.exits())
-	if len(current_room.items) > 0: #if there are any items in the current room
+	if len(current_room.items) > 0: #Checks if there are any items in the current room
 		print("However, you also see:")
 		for item in current_room.items:
-			print(item)#prints out each items
+			print(item) #Prints out each items in the room
 	elif current_room == radio_tower:
 		say("""It's too bright to see anything, not to mention the moths hindering your view.""")
-
-if current_room == radio_tower:
-	if rusty_key not in inventory:
-		print(current_room)
-	else:
-		say("""The dust flying around the tower is hindering your view, the moment you turn the light on, a swam of moths fills the room, irritated, you scan the room for any plugs.
-	There is a bunch of plugs connected to a generator a radio sits by, you can choose to plug in the battery or loiter.""") #Different dialogue if rusty key is already picked up
 
 @when("inventory")
 @when("show inventory")
@@ -164,7 +139,7 @@ if current_room == radio_tower:
 def player_inventory():
 	print("You are carring:")
 	for item in inventory:
-		print(item)
+		print(item) #This shows you what is currently in your inventory.
 
 @when("look at ITEM")
 @when("inspect ITEM")
@@ -173,7 +148,7 @@ def inspect(item):
 		t = inventory.find(item)
 		print(t.description)
 	else:
-		print(f"You aren't carrying an {item}")
+		print(f"You aren't carrying an {item}") #This shows you what item you are carrying's description
 
 
 @when("use silver key")
@@ -190,7 +165,7 @@ def unlock_kitchen():
 		inventory.remove(silver_key)
 		kitchen_unlocked = True
 	elif current_room is not lounge:
-		say("You cannot use that here.")
+		say("You cannot use that here.") #This unlocks the kitchen
 
 @when("use gold key")
 @when("use the gold key")
@@ -206,7 +181,7 @@ def unlock_bathroom():
 		#inventory.remove("silver_key")
 		bathroom_unlocked = True
 	elif current_room is not main_hall:
-		say("You cannot use that here.")
+		say("You cannot use that here.") #This unlocks the bathroom
 
 @when("use rusty key")
 @when("use the rusty key")
@@ -221,7 +196,7 @@ def unlock_basement():
 		say("You unlock the basement door.")
 		basement_unlocked = True
 	elif current_room is not second_hall:
-		say("You cannot use that here.")
+		say("You cannot use that here.") #This unlocks the basement
 
 
 @when("go DIRECTION")
@@ -239,9 +214,12 @@ def travel(direction):
 	if basement_unlocked == True:
 		second_hall.west = basement
 
-	if current_room == second_hall and basement_unlocked == False and direction == 'below':
+	if current_room == second_hall and basement_unlocked == False and direction == 'west':
 		print("The door to the basement is locked")
 		return
+
+	if current_room == basement:
+		quit()
 
 	if bathroom_unlocked == True:
 		main_hall.east = bathroom
@@ -249,30 +227,37 @@ def travel(direction):
 	if current_room == main_hall and bathroom_unlocked == False and direction == 'east':
 		print("The door to the bathroom is locked.")
 
-	if direction in current_room.exits():
-		current_room = current_room.exit(direction)
-		print(f'You go {direction}.')
-		print(current_room)
-	elif direction == outside.east and battery in inventory and rusty_key not in inventory:
+
+	if current_room == outside and direction == 'east' and "battery" in inventory and "rusty key" not in inventory:
 		current_room = radio_tower
 		print(current_room)
-	elif direction == outside.east and rusty_key in inventory and battery in inventory:
+		
+
+	if current_room == outside and direction == 'east' and "rusty key" in inventory and "battery" in inventory:
 		current_room = radio_tower
 		say("""
-		The dust flying around the tower is hindering your view, the moment you turn the light on, a swam of moths fills the room, irritated, you scan the room for any plugs.
+		The dust flying around the tower is hindering your view, the moment you turn the light on, a swarm of moths fills the room, irritated, you scan the room for any plugs.
 		There is a bunch of plugs connected to a generator which a radio sits by, you can choose to plug in the battery.
 		""")
-	elif direction == outside.east and battery not in inventory and rusty_key in inventory:
+
+	if current_room == outside and direction == 'east' and "battery" not in inventory and "rusty key" in inventory:
+		current_room = radio_tower
 		say("""
-		The dust flying around the tower is hindering your view, the moment you turn the light on, a swam of moths fills the room, irritated, you scan the room for any plugs.
+		The dust flying around the tower is hindering your view, the moment you turn the light on, a swarm of moths fills the room, irritated, you scan the room for any plugs.
 		There is a bunch of plugs connected to a generator which a radio sits by.
 		""")
-	elif direction == outside.east and battery not in inventory and rusty_key not in inventory:
+
+	if current_room == outside and direction == 'east' and "battery" not in inventory and "rusty key" not in inventory:
+		current_room = radio_tower
 		say("""	
-		The dust flying around the tower is hindering your view, the moment you turn the light on, a swam of moths fills the room, irritated, you scan the room for any plugs.
+		The dust flying around the tower is hindering your view, the moment you turn the light on, a swarm of moths fills the room, irritated, you scan the room for any plugs.
 		There is a bunch of plugs connected to a generator which a radio sits by, you also see a key on the table, which spikes your curiosity.
 		""")
 
+	elif direction in current_room.exits():
+		current_room = current_room.exit(direction)
+		print(f'You go {direction}.')
+		print(current_room)
 
 	else:
 		print("You can't go that way.")
