@@ -106,11 +106,6 @@ kitchen_unlocked = False
 bathroom_unlocked = False
 basement_unlocked = False
 
-#If statements by themselves (1)
-
-if current_room == basement:
-	quit() #Quits the game when you enter the basement (bad ending)
-
 #Functions
 
 say("""You, Jacob Harper, are a detective in your 30s on your way to investigate a case.
@@ -232,7 +227,7 @@ def unlock_bathroom():
 	global bathroom_unlocked
 	if current_room == main_hall and inventory.find("gold key"):
 		say("You unlock the bathroom door.")
-		inventory.remove("gold_key")
+		inventory.remove(gold_key)
 		bathroom_unlocked = True
 	elif current_room is not main_hall:
 		say("You cannot use that here.") #This unlocks the bathroom upon the command function, removes the item, and checks if you are in the right room to use the item
@@ -250,7 +245,7 @@ def unlock_basement():
 	global basement_unlocked
 	if current_room == second_hall and inventory.find("rusty key"):
 		say("You unlock the basement door.")
-		inventory.remove("rusty_key")
+		inventory.remove(rusty_key)
 		basement_unlocked = True
 	elif current_room is not second_hall:
 		say("You cannot use that here.") #This unlocks the basement upon the command function, removes the item, and checks if you are in the right room to use the item
@@ -274,6 +269,9 @@ def travel(direction):
 	if current_room == second_hall and basement_unlocked == False and direction == 'west': #Checks if the basement is unlocked, not allowing you to enter if it isn't
 		print("The door to the basement is locked.")
 		return
+
+	if current_room == basement:
+		quit() #Quits the game when you enter the basement (bad ending)
 
 	if bathroom_unlocked == True:
 		main_hall.east = bathroom #Checks if the bathroom is unlocked
