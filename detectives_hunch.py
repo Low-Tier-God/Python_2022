@@ -214,7 +214,6 @@ def inspect(item):
 @when("unlock the kitchen")
 @when("unlock the kitchen door")
 def unlock_kitchen():
-	global kitchen_unlocked
 	if current_room == lounge and inventory.find("silver key"):
 		say("You unlock the kitchen door.")
 		inventory.remove(silver_key)
@@ -233,7 +232,7 @@ def unlock_bathroom():
 	global bathroom_unlocked
 	if current_room == main_hall and inventory.find("gold key"):
 		say("You unlock the bathroom door.")
-		inventory.remove(gold_key)
+		inventory.remove("gold_key")
 		bathroom_unlocked = True
 	elif current_room is not main_hall:
 		say("You cannot use that here.") #This unlocks the bathroom upon the command function, removes the item, and checks if you are in the right room to use the item
