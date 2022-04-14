@@ -10,7 +10,7 @@ outside = Room("""
 main_hall = Room("""
 	You now stand in the hallway, you can hear rodents running across the board, it is dark.
 	You feel adrenaline from fear pumping inside you, and you feel like you are being watched.
-	The feeling to run away is looming over you.""")
+	The feeling to run away is looming over you. There is a bathroom to your east.""")
 
 lounge = Room("""
 	You find yourself in the lounge, unable to collect your thoughts, you hear an eerie noise with an unknown location.
@@ -61,7 +61,7 @@ Item.description = ""
 silver_key = Item("silver key","a silver key","the silver key")
 silver_key.description = "The key shines faintly, it has a rough, metallic feeling. You put it back in your pocket."
 
-gold_key = Item("gold key","a gold key","the gold key","key")
+gold_key = Item("gold key","a gold key","the gold key","key","golden key","the golden key","a golden key")
 gold_key.description = "The key feels smooth feeling, althought it is scratched and rusted in some places. You put it back in your pocket."
 
 battery = Item("battery","a battery","the battery","batteries")
@@ -77,7 +77,6 @@ kitchen.items.add(gold_key)
 bathroom.items.add(battery)
 radio_tower.items.add(rusty_key)
 
-
 #Ordered code for getting items
 
 @when("get ITEM")
@@ -88,7 +87,7 @@ radio_tower.items.add(rusty_key)
 @when("take ITEM")
 @when("pick up ITEM")
 @when("grab ITEM")
-def pickup(item):                                 #Function for obtaining items
+def pickup(item):#Function for obtaining items
 	if item in current_room.items:
 		t = current_room.items.take(item)
 		inventory.add(t)
@@ -136,17 +135,17 @@ def sleepyhead():
 
 @when("plug in battery") #Removes the battery from inventory when you use it and unlocks the ability to use the radio
 @when("use battery")
+@when("plug battery")
 @when("plug battery in")
 @when("connect battery")
 @when("connect battery to plugs")
+@when("use the battery")
+@when("plug in the battery")
 def use_battery():
 	global batteryon
-	if current_room == radio_tower:
+	if current_room == radio_tower and inventory.find("battery"):
 		say("You place the battery down and put the plugs into it, a button glows indicating that it is functioning. You can now use the radio.")
-		inventory.remove(battery)
 		batteryon = True
-	elif current_room == radio_tower and battery not in inventory and batteryon == True:
-		say("You've already plugged the battery in")
 	else:
 		say("You actually need a battery to do that")
 
@@ -161,7 +160,7 @@ def use_battery():
 def escape():
 	global escape
 	if current_room == radio_tower and batteryon == True:
-		print("You use the radio and somebody responds, it's the authorities!")        #Lets you escape when using the radio when the battery is on, good ending!
+		print("You use the radio and somebody responds, it's the authorities!")#Lets you escape when using the radio when the battery is on, good ending!
 		quit()
 	elif current_room == radio_tower and batteryon == False:
 		print("The battery to the radio is not on.")
@@ -177,7 +176,6 @@ def look():
 		print("However, you also see:")
 		for item in current_room.items:
 			print(item) #Prints out each item in the room
-
 
 @when("inventory")
 @when("show inventory")
@@ -209,9 +207,9 @@ def inspect(item):
 @when("unlock the kitchen")
 @when("unlock the kitchen door")
 def unlock_kitchen():
+	global kitchen_unlocked
 	if current_room == lounge and inventory.find("silver key"):
 		say("You unlock the kitchen door.")
-		inventory.remove(silver_key)
 		kitchen_unlocked = True
 	elif current_room is not lounge:
 		say("You cannot use that here.") #This unlocks the kitchen upon the command function, removes the item, and checks if you are in the right room to use the item
@@ -223,11 +221,13 @@ def unlock_kitchen():
 @when("unlock bathroom door")
 @when("unlock the bathroom")
 @when("unlock the bathroom door")
+@when("use golden key")
+@when("use a golden key")
+@when("use the golden key")
 def unlock_bathroom():
 	global bathroom_unlocked
 	if current_room == main_hall and inventory.find("gold key"):
 		say("You unlock the bathroom door.")
-		inventory.remove(gold_key)
 		bathroom_unlocked = True
 	elif current_room is not main_hall:
 		say("You cannot use that here.") #This unlocks the bathroom upon the command function, removes the item, and checks if you are in the right room to use the item
@@ -245,7 +245,6 @@ def unlock_basement():
 	global basement_unlocked
 	if current_room == second_hall and inventory.find("rusty key"):
 		say("You unlock the basement door.")
-		inventory.remove(rusty_key)
 		basement_unlocked = True
 	elif current_room is not second_hall:
 		say("You cannot use that here.") #This unlocks the basement upon the command function, removes the item, and checks if you are in the right room to use the item
