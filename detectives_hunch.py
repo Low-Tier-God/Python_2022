@@ -14,7 +14,7 @@ main_hall = Room("""
 
 lounge = Room("""
 	You find yourself in the lounge, unable to collect your thoughts, you hear an eerie noise with an unknown location.
-	You can hear your teeth chattering, it's very cold inside. There is an entrance to the kitchen.""")
+	You can hear your teeth chattering, it's very cold inside. There is an entrance to the kitchen. (North)""")
 
 kitchen = Room("""
 	You walk into the kitchen and to your surprise, the light switch works this time, there is an unfamiliar scent and you can hear the buzzing of the light above you.
@@ -22,7 +22,8 @@ kitchen = Room("""
 
 second_hall = Room("""
 	You look around the hallway, the dust inside is causing you to sniffle. The feeling of being watched is becoming harsher.
-	You shiver from fear, the carpet seems to be wet, with liquid dripping from the wallpaper. You also notice a wooden hatch leading to what you assume is the basement.""")
+	You shiver from fear, the carpet seems to be wet, with liquid dripping from the wallpaper. You also notice a wooden hatch leading to what you assume is the basement.\n
+	(The basement is west)""")
 
 bedroom = Room("""
 	You enter the bedroom, the first thing you notice is the massive, luxurious bed. You have a feeling that it calls you to sleep on it,
@@ -62,7 +63,7 @@ silver_key = Item("silver key","a silver key","the silver key")
 silver_key.description = "The key shines faintly, it has a rough, metallic feeling. You put it back in your pocket."
 
 gold_key = Item("gold key","a gold key","the gold key","key","golden key","the golden key","a golden key")
-gold_key.description = "The key feels smooth feeling, althought it is scratched and rusted in some places. You put it back in your pocket."
+gold_key.description = "The key has a smooth feeling, although it is scratched and chipped in some places. You put it back in your pocket."
 
 battery = Item("battery","a battery","the battery","batteries")
 battery.description = "You lift the battery you hold in your hand, it's heavy; but you don't let anything weigh you down even in the scariest of times."
@@ -124,6 +125,8 @@ say("""You, Jacob Harper, are a detective in your 30s on your way to investigate
 @when("sleep in the bed")
 @when("lay on the bed")
 @when("lay in the bed")
+@when("lay down")
+@when("sleep")
 def sleepyhead():
 	global asleep
 	if current_room == bedroom:
@@ -146,6 +149,8 @@ def use_battery():
 	if current_room == radio_tower and inventory.find("battery"):
 		say("You place the battery down and put the plugs into it, a button glows indicating that it is functioning. You can now use the radio.")
 		batteryon = True
+	elif current_room != radio_tower and inventory.find("battery"):
+		print("You can't use that here")
 	else:
 		say("You actually need a battery to do that")
 
@@ -269,7 +274,7 @@ def travel(direction):
 		print("The door to the basement is locked.")
 		return
 
-	if current_room == basement:
+	while current_room == basement:
 		quit() #Quits the game when you enter the basement (bad ending)
 
 	if bathroom_unlocked == True:
